@@ -1,0 +1,45 @@
+import type { ProductType } from '../../types/products.ts';
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+
+const ProductCard = ({ product }: { product: ProductType }) => {
+  return (
+    <Card
+      sx={{
+        maxWidth: 345,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%',
+      }}
+    >
+      <CardMedia
+        component="img"
+        height="200"
+        image={product.thumbnail}
+        alt={product.title}
+        sx={{ objectFit: 'contain' }}
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h6" component="div" noWrap>
+          {product.title}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" noWrap>
+          {product.description}
+        </Typography>
+        <Typography variant="subtitle1" color="text.primary" sx={{ marginTop: '8px' }}>
+          ${product.price.toFixed(2)}
+        </Typography>
+      </CardContent>
+      <CardActions sx={{ justifyContent: 'space-between', padding: '16px' }}>
+        <Button size="small" color="secondary">
+          View Details
+        </Button>
+        <Button size="small" variant="contained" color="primary">
+          Add to Cart
+        </Button>
+      </CardActions>
+    </Card>
+  );
+};
+
+export default ProductCard;

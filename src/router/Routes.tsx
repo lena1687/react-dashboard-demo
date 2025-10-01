@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Register from '../pages/Register';
-import UsersTable from '../pages/UsersTable';
+import RegisterPage from '../pages/RegisterPage.tsx';
+import ProductsPage from '../pages/ProductsPage.tsx';
 import { AuthProvider, useAuth } from '../context/AuthContext.tsx';
 import type { JSX } from 'react';
 
@@ -14,12 +14,12 @@ const Router = () => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route
-            path="/users"
+            path="/products"
             element={
               <ProtectedRoute>
-                <UsersTable />
+                <ProductsPage />
               </ProtectedRoute>
             }
           />

@@ -15,7 +15,7 @@ import { useRegister } from '../hooks/useRegister.ts';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.tsx';
 
-const Register = () => {
+const RegisterPage = () => {
   const { mutate, isPending, error, isError, isSuccess } = useRegister();
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -57,7 +57,7 @@ const Register = () => {
     mutate(payload, {
       onSuccess: () => {
         login();
-        setTimeout(() => navigate('/users'), 1000);
+        setTimeout(() => navigate('/products'), 500);
       },
     });
   };
@@ -169,4 +169,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;
