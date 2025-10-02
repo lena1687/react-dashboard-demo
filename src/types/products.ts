@@ -43,3 +43,17 @@ type ProductMetaType = {
   barcode: string;
   qrCode: string;
 };
+
+export type ProductsApiResponseType = {
+  products: ProductType[];
+  total: number;
+  skip: number;
+  limit: number;
+};
+
+export type ProductsQueryResultType = {
+  data: ProductsApiResponseType | undefined;
+  isLoading: boolean;
+  isError: boolean;
+  error: unknown;
+};
