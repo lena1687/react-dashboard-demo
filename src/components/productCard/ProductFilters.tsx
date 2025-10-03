@@ -4,13 +4,14 @@ import type { CategoryApiResponseType } from '../../types/products.ts';
 import type { UseQueryResult } from '@tanstack/react-query';
 
 type ProductFiltersProps = {
+  initialParams: Record<string, string>;
   categoriesData: UseQueryResult<CategoryApiResponseType[], Error>;
   category: string | undefined;
 };
 
-const ProductFilters = ({ categoriesData, category }: ProductFiltersProps) => {
+const ProductFilters = ({ initialParams, categoriesData, category }: ProductFiltersProps) => {
   const navigate = useNavigate();
-  const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(initialParams);
 
   const {
     data: categories,

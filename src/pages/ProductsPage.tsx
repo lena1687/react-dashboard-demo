@@ -1,27 +1,30 @@
-import { CircularProgress, Container, Grid, Pagination, Typography, Box } from '@mui/material';
-import ProductCard from '../components/ProductCard/ProductCard.tsx';
-import ProductFilters from '../components/ProductCard/ProductFilters.tsx';
+import { CircularProgress, Container, Grid, Typography, Box } from '@mui/material';
+import ProductCard from '../components/productCard/ProductCard.tsx';
+import ProductFilters from '../components/productCard/ProductFilters.tsx';
+import PaginationControls from '../components/common/PaginationControls.tsx';
 import type { ProductType } from '../types/products.ts';
 import { useCategoriesQuery, useProductsQuery } from '../hooks/useProducts.ts';
 import { useSearchParams, useParams } from 'react-router-dom';
-import * as React from 'react';
 import { useEffect } from 'react';
+import * as React from 'react';
 
 const ProductsPage = () => {
   const [urlParams, setUrlParams] = useSearchParams();
+  const initialPageValue = '1';
+  const initialLimitValue = '12';
+
+  const page = parseInt(urlParams.get('page') || initialPageValue, 10);
+  const limit = parseInt(urlParams.get('limit') || initialLimitValue, 10);
+  const { category } = useParams<{ category?: string }>();
+  const search = urlParams.get('q') || '';
 
   useEffect(() => {
     const params = new URLSearchParams(urlParams.toString());
 
-    if (!params.has('page')) params.set('page', '1');
-    if (!params.has('limit')) params.set('limit', '12');
+    if (!params.has('page')) params.set('page', initialPageValue);
+    if (!params.has('limit')) params.set('limit', initialLimitValue);
     setUrlParams(params);
   }, []);
-
-  const page = parseInt(urlParams.get('page') || '1', 10);
-  const limit = parseInt(urlParams.get('limit') || '12', 10);
-  const { category } = useParams<{ category?: string }>();
-  const search = urlParams.get('q') || '';
 
   const {
     data,
@@ -50,7 +53,14 @@ const ProductsPage = () => {
     <Container maxWidth="lg" sx={{ my: 6 }}>
       <Typography variant="h2">Products</Typography>
 
-      <ProductFilters categoriesData={categoriesQuery} category={category || ''} />
+      <ProductFilters
+        initialParams={{
+          page: initialPageValue,
+          limit: initialLimitValue,
+        }}
+        categoriesData={categoriesQuery}
+        category={category || ''}
+      />
 
       {isLoadingProducts && (
         <Grid container direction="column" alignItems="center" sx={{ mt: 4 }}>
@@ -83,12 +93,7 @@ const ProductsPage = () => {
           ))}
         </Grid>
       )}
-
-      {totalPages > 1 && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-          <Pagination count={totalPages} page={page} onChange={handlePageChange} color="primary" />
-        </Box>
-      )}
+      <PaginationControls totalPages={totalPages} page={page} onChangePage={handlePageChange} />
     </Container>
   );
 };
