@@ -1,7 +1,7 @@
 import type { ProductType } from '../../types/products.ts';
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 
-const ProductCard = ({ product }: { product: ProductType }) => {
+const ProductCard = ({ thumbnail, title, description, price }: ProductType) => {
   return (
     <Card
       sx={{
@@ -14,19 +14,19 @@ const ProductCard = ({ product }: { product: ProductType }) => {
       <CardMedia
         component="img"
         height="200"
-        image={product.thumbnail}
-        alt={product.title}
+        image={thumbnail}
+        alt={title}
         sx={{ objectFit: 'contain' }}
       />
       <CardContent>
         <Typography gutterBottom variant="h6" component="div" noWrap>
-          {product.title}
+          {title}
         </Typography>
         <Typography variant="body2" color="text.secondary" noWrap>
-          {product.description}
+          {description}
         </Typography>
         <Typography variant="subtitle1" color="text.primary" sx={{ marginTop: '8px' }}>
-          ${product.price.toFixed(2)}
+          ${price?.toFixed(2)}
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between', padding: '16px' }}>

@@ -16,13 +16,16 @@ const Router = () => {
         <Routes>
           <Route path="/register" element={<RegisterPage />} />
           <Route
-            path="/products"
+            path="/products/*"
             element={
               <ProtectedRoute>
                 <ProductsPage />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="category/:category" element={<ProductsPage />} />
+            <Route path="search" element={<ProductsPage />} />
+          </Route>
           <Route path="*" element={<Navigate to="/register" />} />
         </Routes>
       </BrowserRouter>

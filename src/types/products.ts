@@ -51,9 +51,22 @@ export type ProductsApiResponseType = {
   limit: number;
 };
 
+export type ProductQueryParamsType = {
+  page: number;
+  limit: number;
+  search?: string;
+  category?: string;
+};
+
 export type ProductsQueryResultType = {
   data: ProductsApiResponseType | undefined;
   isLoading: boolean;
   isError: boolean;
   error: unknown;
+};
+
+export type CategoryApiResponseType = {
+  slug: string;
+  name: string;
+  url: string;
 };
