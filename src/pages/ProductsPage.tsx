@@ -60,6 +60,7 @@ const ProductsPage = () => {
         }}
         categoriesData={categoriesQuery}
         category={category || ''}
+        search={search || ''}
       />
 
       {isLoadingProducts && (

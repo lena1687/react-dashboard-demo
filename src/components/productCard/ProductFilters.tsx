@@ -1,15 +1,26 @@
+import { Grid, InputAdornment, IconButton } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 import { useNavigate } from 'react-router-dom';
 import type { CategoryApiResponseType } from '../../types/products.ts';
 import type { UseQueryResult } from '@tanstack/react-query';
 import SelectControls from '../common/SelectControls.tsx';
+import TextField from '@mui/material/TextField';
+import * as React from 'react';
 
 type ProductFiltersProps = {
   initialParams: Record<string, string>;
   categoriesData: UseQueryResult<CategoryApiResponseType[], Error>;
   category: string | undefined;
+  search: string | undefined;
 };
 
-const ProductFilters = ({ initialParams, categoriesData, category }: ProductFiltersProps) => {
+const ProductFilters = ({
+  initialParams,
+  categoriesData,
+  category,
+  search,
+}: ProductFiltersProps) => {
   const navigate = useNavigate();
   const params = new URLSearchParams(initialParams);
 
@@ -25,7 +36,7 @@ const ProductFilters = ({ initialParams, categoriesData, category }: ProductFilt
     : [];
   const validCategory = categoryOptions.some((cat) => cat.id === category) ? category || '' : '';
 
-  const handleCategory = (selectedCategory: string) => {
+  const handleCategoryChange = (selectedCategory: string) => {
     if (selectedCategory) {
       navigate({
         pathname: `/products/category/${selectedCategory}`,
@@ -39,16 +50,64 @@ const ProductFilters = ({ initialParams, categoriesData, category }: ProductFilt
     }
   };
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearch = event.target.value;
+    if (newSearch) {
+      params.set('q', newSearch);
+      navigate({
+        pathname: `/products/search`,
+        search: params.toString(),
+      });
+    } else {
+      params.delete('q');
+      navigate({
+        pathname: '/products',
+        search: `?${params.toString()}`,
+      });
+    }
+  };
+
+  const handleClear = () => {
+    params.delete('q');
+    navigate({
+      pathname: '/products',
+      search: `?${params.toString()}`,
+    });
+  };
+
   return (
-    <SelectControls
-      label="Category"
-      options={categoryOptions}
-      value={validCategory}
-      onChangeValue={handleCategory}
-      isLoading={isLoadingCategories}
-      isError={isCategoriesError}
-      error={categoriesError}
-    />
+    <Grid container spacing={2} alignItems="center" sx={{ my: 3 }}>
+      <TextField
+        label="Search products"
+        variant="outlined"
+        value={search}
+        onChange={handleSearchChange}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+          endAdornment: search && (
+            <InputAdornment position="end">
+              <IconButton onClick={handleClear} size="small">
+                <ClearIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      <SelectControls
+        label="Category"
+        options={categoryOptions}
+        value={validCategory}
+        onChangeValue={handleCategoryChange}
+        isLoading={isLoadingCategories}
+        isError={isCategoriesError}
+        error={categoriesError}
+      />
+    </Grid>
   );
 };
 

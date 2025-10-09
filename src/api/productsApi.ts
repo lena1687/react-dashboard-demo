@@ -22,10 +22,10 @@ export const FetchProducts = async ({
   const skip = (page - 1) * limit;
   let url = '';
   let params = `?limit=${limit}&skip=${skip}`;
-  if (category) url += `/category/${category}`;
+  if (category) url += `/category/${category}${params}`;
   if (search) url += `/search?q=${search}`;
 
-  const { data } = await api.get<ProductsApiResponseType>(`${url}${params}`);
+  const { data } = await api.get<ProductsApiResponseType>(`${url}`);
   return data || initialDataResponse;
 };
 
