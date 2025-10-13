@@ -1,13 +1,20 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
+export type SelectOption = {
+  id: string;
+  name: string;
+  sortBy?: string;
+  order?: 'asc' | 'desc';
+};
+
 type SelectControlsProps = {
   label: string;
-  options: Record<string, string>[];
+  options: SelectOption[];
   value: string;
   onChangeValue: (value: string) => void;
-  isLoading: boolean;
-  isError: boolean;
-  error: unknown;
+  isLoading?: boolean;
+  isError?: boolean;
+  error?: unknown;
 };
 
 const SelectControls = ({

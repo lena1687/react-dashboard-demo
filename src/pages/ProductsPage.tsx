@@ -2,11 +2,12 @@ import { CircularProgress, Container, Grid, Typography, Box } from '@mui/materia
 import ProductCard from '../components/productCard/ProductCard.tsx';
 import ProductFilters from '../components/productCard/ProductFilters.tsx';
 import PaginationControls from '../components/common/PaginationControls.tsx';
-import type { ProductType } from '../types/products.ts';
+import type { ProductsQueryResultType, ProductType } from '../types/products.ts';
 import { useCategoriesQuery, useProductsQuery } from '../hooks/useProducts.ts';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import * as React from 'react';
+import type { sortOrder } from '../types/common.ts';
 
 const ProductsPage = () => {
   const [urlParams, setUrlParams] = useSearchParams();
@@ -17,6 +18,8 @@ const ProductsPage = () => {
   const limit = parseInt(urlParams.get('limit') || initialLimitValue, 10);
   const { category } = useParams<{ category?: string }>();
   const search = urlParams.get('q') || '';
+  const sortBy = urlParams.get('sortBy') || undefined;
+  const order = (urlParams.get('order') as sortOrder) || undefined;
 
   useEffect(() => {
     const params = new URLSearchParams(urlParams.toString());
@@ -31,11 +34,13 @@ const ProductsPage = () => {
     isLoading: isLoadingProducts,
     isError: isProductsError,
     error: productsError,
-  } = useProductsQuery({
+  }: ProductsQueryResultType = useProductsQuery({
     page,
     limit,
     search,
     category,
+    sortBy,
+    order,
   });
 
   const { products, total } = data || {};
@@ -46,7 +51,11 @@ const ProductsPage = () => {
   const noProducts = products?.length === 0 && !isLoadingProducts && !isProductsError;
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
-    setUrlParams({ page: value.toString(), limit: limit.toString() });
+    setUrlParams({
+      ...Object.fromEntries(urlParams.entries()),
+      page: value.toString(),
+      limit: limit.toString(),
+    });
   };
 
   return (
@@ -61,6 +70,8 @@ const ProductsPage = () => {
         categoriesData={categoriesQuery}
         category={category || ''}
         search={search || ''}
+        sortBy={sortBy}
+        order={order as sortOrder | undefined}
       />
 
       {isLoadingProducts && (
