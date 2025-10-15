@@ -8,6 +8,7 @@ import {
   Typography,
   Chip,
   Box,
+  Rating,
 } from '@mui/material';
 
 const ProductCard = ({
@@ -16,6 +17,7 @@ const ProductCard = ({
   description,
   price,
   discountPercentage,
+  rating,
   meta: { createdAt } = { createdAt: '' },
 }: ProductType) => {
   return (
@@ -56,7 +58,8 @@ const ProductCard = ({
         <Typography gutterBottom variant="h6" component="div" noWrap>
           {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary" noWrap>
+        <Rating name="product-rating" value={rating ?? 0} precision={0.1} readOnly size="small" />
+        <Typography variant="body2" color="text.secondary" noWrap sx={{ marginTop: '6px' }}>
           {description}
         </Typography>
         <Typography
