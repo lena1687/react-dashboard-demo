@@ -3,6 +3,7 @@ import RegisterPage from '../pages/RegisterPage.tsx';
 import ProductsPage from '../pages/ProductsPage.tsx';
 import { AuthProvider, useAuth } from '../context/AuthContext.tsx';
 import type { JSX } from 'react';
+import CartPage from '../pages/CartPage.tsx';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -27,6 +28,7 @@ const Router = () => {
             <Route path="search" element={<ProductsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/register" />} />
+          <Route path="/cart" element={<CartPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -11,15 +11,22 @@ import {
   Rating,
 } from '@mui/material';
 
-const ProductCard = ({
-  thumbnail,
-  title,
-  description,
-  price,
-  discountPercentage,
-  rating,
-  meta: { createdAt } = { createdAt: '' },
-}: ProductType) => {
+type ProductCardProps = {
+  product: ProductType;
+  addToCart: (product: ProductType) => void;
+};
+
+const ProductCard = ({ product, addToCart }: ProductCardProps) => {
+  const {
+    title,
+    description,
+    price,
+    discountPercentage,
+    rating,
+    thumbnail,
+    meta: { createdAt } = { createdAt: '' },
+  } = product;
+
   return (
     <Card
       sx={{
@@ -77,7 +84,7 @@ const ProductCard = ({
         <Button size="small" color="secondary">
           View Details
         </Button>
-        <Button size="small" variant="contained" color="primary">
+        <Button size="small" variant="contained" color="primary" onClick={() => addToCart(product)}>
           Add to Cart
         </Button>
       </CardActions>

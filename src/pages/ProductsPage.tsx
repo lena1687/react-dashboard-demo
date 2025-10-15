@@ -4,13 +4,23 @@ import ProductFilters from '../components/productCard/ProductFilters.tsx';
 import PaginationControls from '../components/common/PaginationControls.tsx';
 import type { ProductsQueryResultType, ProductType } from '../types/products.ts';
 import { useCategoriesQuery, useProductsQuery } from '../hooks/useProducts.ts';
-import { useSearchParams, useParams } from 'react-router-dom';
+import { useSearchParams, useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import * as React from 'react';
 import type { sortOrder } from '../types/common.ts';
+import { useDispatch, useSelector } from 'react-redux';
+import type { AppDispatch, RootState } from '../store';
+import { addItem } from '../store/cart/cartSlice.ts';
+import IconTextButton from '../components/common/IconTextButtonControls.tsx';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const ProductsPage = () => {
   const [urlParams, setUrlParams] = useSearchParams();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   const initialPageValue = '1';
   const initialLimitValue = '12';
 
@@ -58,9 +68,34 @@ const ProductsPage = () => {
     });
   };
 
+  const handleAddToCart = (product: ProductType) => {
+    dispatch(addItem({ ...product, quantity: 1 }));
+  };
+
   return (
     <Container maxWidth="lg" sx={{ my: 6 }}>
-      <Typography variant="h2">Products</Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+        <Typography variant="h4" component="h1">
+          Products
+        </Typography>
+        <IconTextButton
+          icon={<ShoppingCartIcon sx={{ fontSize: '1.8rem' }} />}
+          text="Cart"
+          badgeContent={totalQuantity}
+          size="large"
+          onClick={() => navigate('/cart')}
+          sx={{
+            border: '1px solid',
+            borderColor: 'grey.400',
+            borderRadius: 2,
+            px: 2.4,
+            py: 1.4,
+            '&:hover': {
+              borderColor: 'grey.700',
+            },
+          }}
+        />
+      </Box>
 
       <ProductFilters
         initialParams={{
@@ -100,7 +135,7 @@ const ProductsPage = () => {
         <Grid container spacing={2} justifyContent="center">
           {products?.map((product: ProductType) => (
             <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-              <ProductCard {...product} />
+              <ProductCard product={product} addToCart={handleAddToCart} />
             </Grid>
           ))}
         </Grid>
