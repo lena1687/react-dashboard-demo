@@ -19,6 +19,8 @@ const ProductsPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const categoriesQuery = useCategoriesQuery();
+
   const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const initialPageValue = '1';
@@ -55,8 +57,6 @@ const ProductsPage = () => {
 
   const { products, total } = data || {};
 
-  const categoriesQuery = useCategoriesQuery();
-
   const totalPages = products ? Math.ceil((total || 0) / limit) : 0;
   const noProducts = products?.length === 0 && !isLoadingProducts && !isProductsError;
 
@@ -79,14 +79,14 @@ const ProductsPage = () => {
           Products
         </Typography>
         <IconTextButton
-          icon={<ShoppingCartIcon sx={{ fontSize: '1.8rem' }} />}
+          icon={<ShoppingCartIcon />}
           text="Cart"
           badgeContent={totalQuantity}
           size="large"
           onClick={() => navigate('/cart')}
           sx={{
             border: '1px solid',
-            borderColor: 'grey.400',
+            borderColor: 'grey.300',
             borderRadius: 2,
             px: 2.4,
             py: 1.4,

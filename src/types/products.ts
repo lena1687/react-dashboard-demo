@@ -1,7 +1,7 @@
 import type { sortOrder } from './common.ts';
 
 export type ProductType = {
-  id: string;
+  id: number;
   title: string;
   description: string;
   category: string;

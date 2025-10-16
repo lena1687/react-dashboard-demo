@@ -1,11 +1,17 @@
 import type { RootState } from '../store';
-import { useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, TextField, Typography } from '@mui/material';
+import { updateItemQuantity } from '../store/cart/cartSlice.ts';
 
 const CartPage = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const dispatch = useDispatch();
 
   const total = cartItems.reduce((sum, { price, quantity }) => sum + price * quantity, 0);
+
+  const handleUpdateQuantity = (event: any, id: number) => {
+    dispatch(updateItemQuantity({ id: id, quantity: Number(event.target.value) }));
+  };
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', mt: 4 }}>
@@ -41,9 +47,16 @@ const CartPage = () => {
             <Box>
               <Typography variant="h6">{title}</Typography>
               <Typography variant="body2" color="textSecondary">
-                ${price.toFixed(2)} x {quantity}
+                ${price.toFixed(2)}
               </Typography>
             </Box>
+            <TextField
+              type="number"
+              value={quantity}
+              size="small"
+              onChange={(event) => handleUpdateQuantity(event, id)}
+              inputProps={{ min: 1, style: { width: 60, textAlign: 'center' } }}
+            />
           </Box>
         </Box>
       ))}
